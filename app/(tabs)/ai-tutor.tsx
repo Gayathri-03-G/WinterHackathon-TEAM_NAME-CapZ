@@ -5,7 +5,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useTranscript } from '../../context/TranscriptContext';
 
-const genAI = new GoogleGenerativeAI("YOUR_GEMINI_API_KEY");
+const genAI = new GoogleGenerativeAI("AIzaSyDiaQE-L2SoSqSmTENEa0_41e2Cv4JzFTA");
 
 export default function AITutorScreen() {
   const { transcript } = useTranscript();
