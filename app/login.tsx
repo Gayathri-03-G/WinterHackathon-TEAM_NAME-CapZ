@@ -16,6 +16,7 @@ export default function LoginScreen() {
     iosClientId: 'YOUR_IOS_CLIENT_ID',
     androidClientId: '208790099010-qksfpanfog3v3dksk0nbm0mbjdkf4cdn.apps.googleusercontent.com',
     webClientId: '208790099010-52o46hlj77tfscp4q1dpofqj954n82am.apps.googleusercontent.com',
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
   });
 
   useEffect(() => {
