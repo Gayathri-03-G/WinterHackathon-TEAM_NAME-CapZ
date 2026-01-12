@@ -39,7 +39,7 @@ function NavigationLogic() {
     return (
       <View style={styles.splashContainer}>
         <Image 
-          source={require('../assets/images/splash-icon.png')} 
+          source={require('../assets/images/splash-logo.png')} 
           style={styles.logo}
           resizeMode="contain"
         />
