@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { View, Image, StyleSheet, ActivityIndicator } from 'react-native';
 
-// 1. IMPORT THE PROVIDER AND THE HOOK
+// 1. IMPORT BOTH PROVIDERS
 import { AuthProvider, useAuth } from '../context/AuthContext'; 
+import { TranscriptProvider } from '../context/TranscriptContext'; // <-- Add this
 
 function NavigationLogic() {
   const [isAppReady, setAppReady] = useState(false);
-  const { user } = useAuth(); // Now this won't be null because it's inside AuthProvider
+  const { user } = useAuth(); 
   const segments = useSegments();
   const router = useRouter();
 
-  // Handle Initial Loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setAppReady(true);
@@ -19,18 +19,14 @@ function NavigationLogic() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Handle Redirection Logic
   useEffect(() => {
     if (!isAppReady) return;
-
     const inTabsGroup = segments[0] === '(tabs)';
     const isLoggedIn = !!user;
 
     if (!isLoggedIn && inTabsGroup) {
-      // Not logged in but trying to access home? Go to login.
       router.replace('/login');
     } else if (isLoggedIn && !inTabsGroup) {
-      // Logged in but on login page? Go to home.
       router.replace('/(tabs)');
     }
   }, [isAppReady, user, segments]);
@@ -48,8 +44,6 @@ function NavigationLogic() {
     );
   }
 
-  
-
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" options={{ animation: 'fade' }} />
@@ -58,11 +52,13 @@ function NavigationLogic() {
   );
 }
 
-// 2. THE MAIN EXPORT WRAPS EVERYTHING IN THE PROVIDER
+// 2. WRAP EVERYTHING IN NESTED PROVIDERS
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <NavigationLogic />
+      <TranscriptProvider>
+        <NavigationLogic />
+      </TranscriptProvider>
     </AuthProvider>
   );
 }
