@@ -1,89 +1,124 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform, Dimensions } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 
-// Ensures the browser window closes correctly after login
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { setUser } = useAuth(); // Moved inside the component
+  const { setUser } = useAuth();
 
-  // Initialize the Google Auth Request
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com',
-    androidClientId: 'YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com',
+    iosClientId: 'YOUR_IOS_CLIENT_ID',
+    androidClientId: '208790099010-qksfpanfog3v3dksk0nbm0mbjdkf4cdn.apps.googleusercontent.com',
     webClientId: '208790099010-52o46hlj77tfscp4q1dpofqj954n82am.apps.googleusercontent.com',
   });
 
-  // Main Effect to handle the Google response
   useEffect(() => {
     if (response?.type === 'success') {
-      const { authentication } = response;
-      if (authentication?.accessToken) {
-        console.log('Login Success, fetching user info...');
-        fetchUserInfo(authentication.accessToken);
-      }
+      fetchUserInfo(response.authentication?.accessToken);
     }
   }, [response]);
 
-  // Function to get Name, Email, and Photo from Google
-  async function fetchUserInfo(token: string) {
+  async function fetchUserInfo(token: any) {
     try {
       const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const userInfo = await res.json();
-      
-      setUser(userInfo); // Save Google data to global context
-      router.replace('/(tabs)'); // Navigate to Home
+      setUser(userInfo); 
+      router.replace('/(tabs)');
     } catch (error) {
-      console.error("Failed to fetch user info:", error);
+      console.error(error);
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.welcomeText}>Welcome to</Text>
-        <Text style={styles.brandText}>
-          <Text style={{ color: '#00E5FF' }}>CapZ</Text> AI
-        </Text>
+      <View style={Platform.OS === 'web' ? styles.webWrapper : styles.content}>
         
-        <Text style={styles.description}>
-          Capture lectures, generate notes, and study smarter with AI
-        </Text>
+        {/* Only show this extra side-panel on Web */}
+        {Platform.OS === 'web' && (
+          <View style={styles.webArtSide}>
+            <Text style={styles.webArtTitle}>Elevate Your Learning</Text>
+            <Text style={styles.webArtSub}>Join thousands of students using CapZ AI to master their lectures.</Text>
+          </View>
+        )}
 
-        <View style={styles.features}>
-          <Text style={styles.featureItem}>•  Live lecture transcription</Text>
-          <Text style={styles.featureItem}>•  AI-generated study materials</Text>
-          <Text style={styles.featureItem}>•  Smart scheduling & reminders</Text>
+        <View style={Platform.OS === 'web' ? styles.loginCardWeb : styles.loginContentMobile}>
+          <Text style={styles.welcomeText}>Welcome to</Text>
+          <Text style={styles.brandText}>
+            <Text style={{ color: '#00E5FF' }}>CapZ</Text> AI
+          </Text>
+          
+          <Text style={styles.description}>
+            Capture lectures, generate notes, and study smarter with AI
+          </Text>
+
+          <View style={styles.features}>
+            <Text style={styles.featureItem}>•  Live lecture transcription</Text>
+            <Text style={styles.featureItem}>•  AI-generated study materials</Text>
+            <Text style={styles.featureItem}>•  Smart scheduling & reminders</Text>
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.googleButton, !request && { opacity: 0.6 }]} 
+            disabled={!request}
+            onPress={() => promptAsync()} 
+          >
+            <AntDesign name="google" size={20} color="black" />
+            <Text style={styles.buttonText}>Continue with Google</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.footerText}>
+            By continuing, you agree to our Terms of Service and Privacy Policy
+          </Text>
         </View>
-
-        <TouchableOpacity 
-          style={[styles.googleButton, !request && { opacity: 0.6 }]} 
-          disabled={!request}
-          onPress={() => promptAsync()} 
-        >
-          <AntDesign name="google" size={20} color="black" />
-          <Text style={styles.buttonText}>Continue with Google</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.footerText}>
-          By continuing, you agree to our Terms of Service and Privacy Policy
-        </Text>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#090A0F' },
-  content: { flex: 1, padding: 30, justifyContent: 'center', alignItems: 'center' },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#090A0F' 
+  },
+  // WEB SPECIFIC WRAPPER
+  webWrapper: {
+    flex: 1,
+    flexDirection: 'row', // Side-by-side on web
+  },
+  webArtSide: {
+    flex: 1,
+    backgroundColor: '#1A1D26',
+    justifyContent: 'center',
+    padding: 60,
+    display: Platform.OS === 'web' ? 'flex' : 'none',
+  },
+  webArtTitle: { fontSize: 48, fontWeight: 'bold', color: '#FFF', marginBottom: 20 },
+  webArtSub: { fontSize: 18, color: '#A0A0A0', lineHeight: 28 },
+  loginCardWeb: {
+    width: 500, // Fixed width so it looks like a card on web
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  // MOBILE & ORIGINAL STYLES
+  content: { 
+    flex: 1, 
+    padding: 30, 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  },
+  loginContentMobile: {
+    alignItems: 'center',
+    width: '100%',
+  },
   welcomeText: { fontSize: 32, fontWeight: 'bold', color: '#FFF' },
   brandText: { fontSize: 48, fontWeight: 'bold', color: '#9D86FF', marginBottom: 20 },
   description: { color: '#A0A0A0', textAlign: 'center', fontSize: 16, marginBottom: 40, lineHeight: 24 },
@@ -99,6 +134,6 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     gap: 10 
   },
-  buttonText: { fontWeight: '600', fontSize: 16 },
+  buttonText: { fontWeight: '600', fontSize: 16, color: '#000' },
   footerText: { color: '#666', fontSize: 12, textAlign: 'center', marginTop: 30 }
 });

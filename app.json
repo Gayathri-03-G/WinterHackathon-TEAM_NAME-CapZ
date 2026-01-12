@@ -10,7 +10,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourname.capz"
+      "bundleIdentifier": "com.yourname.capz",
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Allow CapZ to transcribe your lectures into notes.",
+        "NSMicrophoneUsageDescription": "Allow CapZ to access the microphone for lecture transcription."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +25,10 @@
       },
       "package": "com.yourname.capz",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "output": "static",
@@ -53,6 +60,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "05bae122-2f2b-4f8d-8cd8-dd877f75528f"
+      }
+    },
+    "owner": "prajwal_royston_cordiero"
   }
 }
