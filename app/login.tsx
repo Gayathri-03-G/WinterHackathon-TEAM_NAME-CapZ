@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform, Dimensions } from 'react-native';
+import { 
+  View, Text, StyleSheet, TouchableOpacity, 
+  SafeAreaView, Platform, Alert 
+} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -12,23 +15,29 @@ export default function LoginScreen() {
   const router = useRouter();
   const { setUser } = useAuth();
 
+  // 1. Google Auth Request Configuration
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: '208790099010-qksfpanfog3v3dksk0nbm0mbjdkf4cdn.apps.googleusercontent.com', // Same as Android for now
+    iosClientId: 'YOUR_IOS_CLIENT_ID', // Replace with your actual iOS ID
     androidClientId: '208790099010-qksfpanfog3v3dksk0nbm0mbjdkf4cdn.apps.googleusercontent.com',
     webClientId: '208790099010-52o46hlj77tfscp4q1dpofqj954n82am.apps.googleusercontent.com',
-    scopes: ['https://www.googleapis.com/auth/drive.readonly', 'profile', 'email'],
+    // 🛡️ THIS SCOPE IS REQUIRED TO SEE DRIVE FILES
+    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
   });
 
+  // 2. Handle the Google Response
   useEffect(() => {
     if (response?.type === 'success') {
-      fetchUserInfo(response.authentication?.accessToken);
+      const { authentication } = response;
+      if (authentication?.accessToken) {
+        fetchUserInfo(authentication.accessToken);
+      }
     } else if (response?.type === 'error') {
-      console.error('OAuth Error:', response.error);
-      alert('Login failed. Please check your Google account settings.');
+      Alert.alert("Login Error", "Could not connect to Google.");
     }
   }, [response]);
 
-  async function fetchUserInfo(token: any) {
+  // 3. Fetch Profile Info & SAVE EVERYTHING to Context
+  async function fetchUserInfo(token: string) {
     try {
       const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
         headers: { Authorization: `Bearer ${token}` },
@@ -39,30 +48,26 @@ export default function LoginScreen() {
       }
 
       const userInfo = await res.json();
+      
+      // ✅ THE CRITICAL FIX: Save the token along with user info
+      // This allows the Library screen to use user.accessToken
       setUser({
         ...userInfo,
-        accessToken: token
-      });
+        accessToken: token, 
+      }); 
+
+      console.log("User logged in with Drive permissions");
       router.replace('/(tabs)');
     } catch (error) {
-      console.error('Error fetching user info:', error);
-      alert('Failed to get user information. Please try again.');
+      console.error("Failed to fetch user info:", error);
+      Alert.alert("Error", "Failed to get user profile.");
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={Platform.OS === 'web' ? styles.webWrapper : styles.content}>
-        
-        {/* Only show this extra side-panel on Web */}
-        {Platform.OS === 'web' && (
-          <View style={styles.webArtSide}>
-            <Text style={styles.webArtTitle}>Elevate Your Learning</Text>
-            <Text style={styles.webArtSub}>Join thousands of students using CapZ AI to master their lectures.</Text>
-          </View>
-        )}
-
-        <View style={Platform.OS === 'web' ? styles.loginCardWeb : styles.loginContentMobile}>
+      <View style={styles.content}>
+        <View style={styles.loginContentMobile}>
           <Text style={styles.welcomeText}>Welcome to</Text>
           <Text style={styles.brandText}>
             <Text style={{ color: '#00E5FF' }}>CapZ</Text> AI
@@ -75,7 +80,7 @@ export default function LoginScreen() {
           <View style={styles.features}>
             <Text style={styles.featureItem}>•  Live lecture transcription</Text>
             <Text style={styles.featureItem}>•  AI-generated study materials</Text>
-            <Text style={styles.featureItem}>•  Smart scheduling & reminders</Text>
+            <Text style={styles.featureItem}>•  Smart doubt clearing with AI</Text>
           </View>
 
           <TouchableOpacity 
@@ -88,7 +93,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
 
           <Text style={styles.footerText}>
-            By continuing, you agree to our Terms of Service and Privacy Policy
+            By continuing, you grant CapZ permission to access your study folder.
           </Text>
         </View>
       </View>
@@ -97,43 +102,11 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#090A0F' 
-  },
-  // WEB SPECIFIC WRAPPER
-  webWrapper: {
-    flex: 1,
-    flexDirection: 'row', // Side-by-side on web
-  },
-  webArtSide: {
-    flex: 1,
-    backgroundColor: '#1A1D26',
-    justifyContent: 'center',
-    padding: 60,
-    display: Platform.OS === 'web' ? 'flex' : 'none',
-  },
-  webArtTitle: { fontSize: 48, fontWeight: 'bold', color: '#FFF', marginBottom: 20 },
-  webArtSub: { fontSize: 18, color: '#A0A0A0', lineHeight: 28 },
-  loginCardWeb: {
-    width: 500, // Fixed width so it looks like a card on web
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 40,
-  },
-  // MOBILE & ORIGINAL STYLES
-  content: { 
-    flex: 1, 
-    padding: 30, 
-    justifyContent: 'center', 
-    alignItems: 'center' 
-  },
-  loginContentMobile: {
-    alignItems: 'center',
-    width: '100%',
-  },
+  container: { flex: 1, backgroundColor: '#090A0F' },
+  content: { flex: 1, padding: 30, justifyContent: 'center', alignItems: 'center' },
+  loginContentMobile: { alignItems: 'center', width: '100%' },
   welcomeText: { fontSize: 32, fontWeight: 'bold', color: '#FFF' },
-  brandText: { fontSize: 48, fontWeight: 'bold', color: '#9D86FF', marginBottom: 20 },
+  brandText: { fontSize: 48, fontWeight: 'bold', color: '#FFF', marginBottom: 20 },
   description: { color: '#A0A0A0', textAlign: 'center', fontSize: 16, marginBottom: 40, lineHeight: 24 },
   features: { alignSelf: 'flex-start', marginBottom: 60, gap: 15 },
   featureItem: { color: '#FFF', fontSize: 16 },

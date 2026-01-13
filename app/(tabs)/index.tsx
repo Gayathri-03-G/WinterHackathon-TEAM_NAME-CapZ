@@ -6,10 +6,9 @@ import {
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useAuth } from '../../context/AuthContext';
 
-// 1. CONFIG: Add your IDs here
-const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY || "AIzaSyB8W_3dGlyEaH3fmsgPrkHz5TWzV1npMKo";
-const GEN_AI = new GoogleGenerativeAI(API_KEY);
-const NOTES_FOLDER_ID = "1B5B4bsiUuunFMe6imTqsqKaCybx2Z_Bn";
+// 1. CONFIG: Your specific IDs
+const GEN_AI = new GoogleGenerativeAI("AIzaSyDiaQE-L2SoSqSmTENEa0_41e2Cv4JzFTA");
+const NOTES_FOLDER_ID = "1B5B4bsiUuunFMe6imTqsqKaCybx2Z_Bn"; 
 
 export default function SmartLibrary() {
   const [notes, setNotes] = useState<{ id: string; name: string }[]>([]);
@@ -20,15 +19,14 @@ export default function SmartLibrary() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
-  // 2. FETCH FILE LIST
+  // 2. FETCH THE LIST OF NOTES
   const fetchFiles = async () => {
-    if (!user?.accessToken) {
-      console.log('No access token available');
-      return;
-    }
-
+    // If user.accessToken is missing, the list will be blank!
+    if (!user?.accessToken) return;
+    
     setLoading(true);
     try {
+      // Query filters for your specific folder and hides trashed files
       const q = encodeURIComponent(`'${NOTES_FOLDER_ID}' in parents and trashed = false`);
       const response = await fetch(
         `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id, name)`,
@@ -47,36 +45,27 @@ export default function SmartLibrary() {
       const data = await response.json();
 
       if (data.error) {
-        console.error('Drive API error:', data.error);
-        Alert.alert(
-          "Permission Error",
-          "Unable to access Google Drive. Please make sure:\n\n" +
-          "1. You're logged in with Google\n" +
-          "2. You've granted Drive access\n" +
-          "3. The folder ID is correct\n\n" +
-          "Error: " + data.error.message
-        );
+        Alert.alert("Permission Error", "Please log out and log in again to grant Drive access.");
       } else {
         setNotes(data.files || []);
       }
     } catch (e) {
-      console.error('Error fetching files:', e);
-      Alert.alert(
-        "Connection Error",
-        "Failed to connect to Google Drive. Please check your internet connection and try again."
-      );
+      console.error("Fetch error:", e);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchFiles(); }, [user]);
+  useEffect(() => { fetchFiles(); }, [user?.accessToken]);
 
-  // 3. READ FILE CONTENT
+  // 3. READ NOTE CONTENT
   const openNote = async (file: { id: string; name: string }) => {
     setSelectedNote(file);
-    setNoteContent("Reading content...");
+    setNoteContent("Loading your notes...");
+    setChatHistory([]); // Clear old chat
+    
     try {
+      // Converts Google Doc to plain text so AI can read it
       const response = await fetch(
         `https://www.googleapis.com/drive/v3/files/${file.id}/export?mimeType=text/plain`,
         {
@@ -94,8 +83,7 @@ export default function SmartLibrary() {
       const text = await response.text();
       setNoteContent(text || "File appears to be empty or not a readable format.");
     } catch (e) {
-      console.error('Error reading file:', e);
-      setNoteContent("Could not read file. Make sure it's a Google Doc and you have permission to access it.");
+      setNoteContent("Could not read file. Check if it is a Google Doc.");
     }
   };
 
@@ -109,66 +97,80 @@ export default function SmartLibrary() {
     setChatInput("");
   };
 
-  // 4. AI CHAT
+  // 4. AI CHAT LOGIC
   const askAssistant = async () => {
     if (!chatInput) return;
     const model = GEN_AI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const prompt = `Lecture Notes: "${noteContent}" \n Student Question: ${chatInput}`;
-
+    const prompt = `Use these lecture notes: "${noteContent}" to answer: ${chatInput}`;
+    
     try {
       const result = await model.generateContent(prompt);
       const response = await result.response;
       setChatHistory([...chatHistory, { q: chatInput, a: response.text() }]);
       setChatInput("");
     } catch (e) {
-      Alert.alert("AI Error", "Failed to reach Gemini.");
+      Alert.alert("AI Error", "Failed to connect to Gemini.");
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <Text style={styles.header}>My Notes</Text>
-        <View style={styles.headerButtons}>
-          <TouchableOpacity onPress={fetchFiles} style={styles.headerButton}>
-            <Text style={styles.headerButtonText}>Refresh</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout} style={styles.headerButton}>
-            <Text style={styles.headerButtonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.header}>Lecture Library</Text>
+        <TouchableOpacity onPress={fetchFiles}>
+          <Text style={styles.refreshBtn}>Refresh</Text>
+        </TouchableOpacity>
       </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#CCFF00" />
+        <ActivityIndicator size="large" color="#00E5FF" />
       ) : (
         <ScrollView>
           {notes.map(note => (
             <TouchableOpacity key={note.id} style={styles.card} onPress={() => openNote(note)}>
               <Text style={styles.noteTitle}>{note.name}</Text>
+              <Text style={styles.subText}>Study Guide Available</Text>
             </TouchableOpacity>
           ))}
-          {notes.length === 0 && <Text style={styles.empty}>No files found in folder.</Text>}
+          {notes.length === 0 && !loading && (
+            <Text style={styles.empty}>No notes found in your folder yet.</Text>
+          )}
         </ScrollView>
       )}
 
-      {/* MODAL VIEW */}
+      {/* READING VIEW & AI TUTOR */}
       <Modal visible={!!selectedNote} animationType="slide">
         <View style={styles.modal}>
-          <TouchableOpacity onPress={() => setSelectedNote(null)} style={styles.backBtn}><Text style={{color:'#FFF'}}>← Back</Text></TouchableOpacity>
-          <ScrollView style={{padding: 20}}>
+          <TouchableOpacity onPress={() => setSelectedNote(null)} style={styles.backBtn}>
+            <Text style={styles.backText}>← Back to Library</Text>
+          </TouchableOpacity>
+
+          <ScrollView style={styles.modalContent}>
             <Text style={styles.modalTitle}>{selectedNote?.name}</Text>
             <Text style={styles.noteBody}>{noteContent}</Text>
+            
             <View style={styles.aiBox}>
-              <Text style={styles.aiTitle}>AI Tutor</Text>
+              <Text style={styles.aiHeader}>Chat with AI Tutor</Text>
               {chatHistory.map((c, i) => (
-                <View key={i} style={styles.chat}><Text style={{color: '#CCFF00'}}>Q: {c.q}</Text><Text style={{color: '#FFF'}}>{c.a}</Text></View>
+                <View key={i} style={styles.chatBubble}>
+                  <Text style={styles.userQ}>Q: {c.q}</Text>
+                  <Text style={styles.aiA}>{c.a}</Text>
+                </View>
               ))}
             </View>
           </ScrollView>
-          <View style={styles.inputRow}>
-            <TextInput style={styles.input} placeholder="Ask a doubt..." placeholderTextColor="#666" value={chatInput} onChangeText={setChatInput} />
-            <TouchableOpacity onPress={askAssistant} style={styles.send}><Text>Ask</Text></TouchableOpacity>
+
+          <View style={styles.inputArea}>
+            <TextInput 
+              style={styles.input} 
+              placeholder="Ask a question about this note..." 
+              placeholderTextColor="#666" 
+              value={chatInput} 
+              onChangeText={setChatInput} 
+            />
+            <TouchableOpacity onPress={askAssistant} style={styles.sendBtn}>
+              <Text style={styles.sendText}>Ask AI</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -180,20 +182,24 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#090A0F', padding: 20, paddingTop: 60 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
   header: { fontSize: 28, color: '#FFF', fontWeight: 'bold' },
-  headerButtons: { flexDirection: 'row', gap: 10 },
-  headerButton: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#1A1D26', borderRadius: 6 },
-  headerButtonText: { color: '#CCFF00', fontSize: 14 },
-  card: { backgroundColor: '#1A1D26', padding: 20, borderRadius: 12, marginBottom: 10 },
-  noteTitle: { color: '#FFF', fontSize: 16 },
-  empty: { color: '#444', textAlign: 'center', marginTop: 40 },
+  refreshBtn: { color: '#00E5FF', fontWeight: '600', marginTop: 10 },
+  card: { backgroundColor: '#1A1D26', padding: 20, borderRadius: 15, marginBottom: 12 },
+  noteTitle: { color: '#FFF', fontSize: 18, fontWeight: '600' },
+  subText: { color: '#666', fontSize: 12, marginTop: 5 },
+  empty: { color: '#444', textAlign: 'center', marginTop: 50 },
   modal: { flex: 1, backgroundColor: '#090A0F' },
   backBtn: { padding: 20, paddingTop: 50, backgroundColor: '#1A1D26' },
-  modalTitle: { color: '#FFF', fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
-  noteBody: { color: '#AAA', lineHeight: 22 },
-  aiBox: { marginTop: 30, borderTopWidth: 1, borderColor: '#333', paddingTop: 20 },
-  aiTitle: { color: '#9D86FF', fontSize: 20, fontWeight: 'bold', marginBottom: 15 },
-  chat: { marginBottom: 15, backgroundColor: '#1A1D26', padding: 10, borderRadius: 8 },
-  inputRow: { flexDirection: 'row', padding: 20, backgroundColor: '#1A1D26' },
-  input: { flex: 1, backgroundColor: '#252833', color: '#FFF', padding: 10, borderRadius: 8 },
-  send: { backgroundColor: '#CCFF00', marginLeft: 10, padding: 10, borderRadius: 8, justifyContent: 'center' }
+  backText: { color: '#00E5FF', fontWeight: 'bold' },
+  modalContent: { padding: 20 },
+  modalTitle: { color: '#FFF', fontSize: 24, fontWeight: 'bold', marginBottom: 15 },
+  noteBody: { color: '#CCC', lineHeight: 24, fontSize: 15 },
+  aiBox: { marginTop: 40, borderTopWidth: 1, borderColor: '#333', paddingTop: 20 },
+  aiHeader: { color: '#9D86FF', fontSize: 20, fontWeight: 'bold', marginBottom: 15 },
+  chatBubble: { backgroundColor: '#1A1D26', padding: 15, borderRadius: 12, marginBottom: 10 },
+  userQ: { color: '#00E5FF', fontWeight: 'bold', marginBottom: 5 },
+  aiA: { color: '#FFF', fontSize: 14 },
+  inputArea: { flexDirection: 'row', padding: 20, backgroundColor: '#1A1D26' },
+  input: { flex: 1, backgroundColor: '#252833', color: '#FFF', padding: 12, borderRadius: 10 },
+  sendBtn: { backgroundColor: '#00E5FF', marginLeft: 10, paddingHorizontal: 20, borderRadius: 10, justifyContent: 'center' },
+  sendText: { fontWeight: 'bold', color: '#000' }
 });

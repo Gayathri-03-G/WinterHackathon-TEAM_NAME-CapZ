@@ -1,116 +1,90 @@
-# CapZ AI - Data Structures & Algorithms Learning App 📚
+Capz AI: Aura-Link 🧠✨
 
-A comprehensive React Native Expo app for learning Data Structures & Algorithms with AI-powered assistance.
+Stop Taking Notes. Start Taking Insights.
 
-## Features ✨
+Capz AI is an educational technology startup dedicated to removing the "interface" between students and learning. Our flagship product, the Aura-Link Node, is a screen-less wearable designed to help students stay 100% present in the classroom while an AI-powered "Second Brain" handles the heavy lifting of recording, transcribing, and visualizing complex concepts.
 
-### 📱 **Multi-Tab Interface**
-- **Library**: Browse subjects and lectures
-- **Capture**: Voice recording and note-taking
-- **Profile**: User profile and settings
-- **Study**: Complete DSA learning system
+🚀 The Product: Aura-Link Node
 
-### 🎓 **Study System (Study Tab)**
-- **Library View**: Subject cards with progress tracking
-- **Session View**: 5 specialized tabs per lecture:
-  - 📝 **Notes**: Detailed lecture content
-  - 🤖 **ChatBot**: Gemini AI tutor (note-restricted answers)
-  - 📊 **Diagrams**: ASCII art data structure visualizations
-  - 🎵 **Audio**: Text-to-speech lecture playback with speed control
-  - 📅 **Schedule**: Study tasks and deadlines
-  - 📄 **PDF**: Embedded lecture materials
+The Aura-Link Node is a transparent, minimalist wearable that captures high-fidelity audio and uses Gemini 2.0 models to process lectures in real-time.
 
-### 🔐 **Authentication**
-- Google OAuth integration
-- Secure user sessions
+Key Innovations:
 
-### 🎨 **UI/UX**
-- Dark theme optimized for mobile
-- Smooth navigation with Expo Router
-- Responsive design
+Voice-to-Diagram: Automatically converts verbal descriptions of processes into professional flowcharts and mind maps.
 
-## Setup Instructions 🚀
+Google Workspace Native: Syncs directly to Google Docs, Drive, and Calendar—no new apps to learn.
 
-### 1. **Install Dependencies**
-```bash
-npm install
-```
+AI Tutor: A context-aware assistant that knows exactly what was said in your specific lecture.
 
-### 2. **Configure Gemini AI**
-1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Update `.env` file:
-```env
-EXPO_PUBLIC_GEMINI_API_KEY=your_actual_api_key_here
-```
+Screen-less Design: Promotes eye contact and engagement by removing the distraction of phones and laptops.
 
-### 3. **Start the App**
-```bash
-npx expo start
-```
+💻 The Platform
 
-### 4. **Run on Device**
-- Scan QR code with Expo Go app
-- Or use Android/iOS simulators
+This repository contains the high-fidelity web platform for Capz AI, built with a "Cozy Dark" Academic Tech aesthetic.
 
-## Project Structure 📁
+1. Landing Page (index.html)
 
-```
-WinterHackathon-TEAM_NAME-CapZ/
-├── app/
-│   ├── (tabs)/
-│   │   ├── _layout.tsx      # Tab navigation
-│   │   ├── index.tsx        # SmartLibrary (Google Drive)
-│   │   ├── capture.tsx      # Voice capture
-│   │   ├── profile.tsx      # User profile
-│   │   └── library.tsx      # Study system
-│   └── _layout.tsx          # Root layout
-├── components/
-│   ├── Library.tsx          # Subject cards
-│   ├── Session.tsx          # Tab container
-│   ├── NotesTab.tsx         # Lecture notes
-│   ├── ChatBot.tsx          # AI assistant
-│   ├── DiagramsTab.tsx      # Data structures
-│   ├── AudioTab.tsx         # TTS player
-│   ├── ScheduleTab.tsx      # Study schedule
-│   └── PDFTab.tsx           # Lecture PDF
-├── data/
-│   ├── sessions.js          # Lecture data
-│   └── dsNotes.json         # DSA content
-├── context/
-│   └── AuthContext.tsx      # Authentication
-└── assets/
-    └── ds-lecture.html      # PDF content
-```
+360° Product Visualization: Integrated 3D render video showing the transparent hardware.
 
-## Key Technologies 🛠️
+Pain Point Analysis: Identifying the "30 vs 150 word gap" in traditional note-taking.
 
-- **React Native** with Expo SDK
-- **Expo Router** for navigation
-- **Google Gemini AI** for chatbot
-- **Expo Speech** for text-to-speech
-- **React Native WebView** for PDF display
-- **Google OAuth** for authentication
+The Team: Introduction to the founders behind the mission.
 
-## Development Notes 📝
+FAQ: Addressing privacy, legality, and technical concerns.
 
-- All components are TypeScript-ready
-- Dark theme with consistent styling
-- AI responses restricted to lecture notes only
-- Environment variables for secure API keys
-- Modular component architecture
+2. Product Configurator (Order.html)
 
-## API Keys Required 🔑
+Hardware vs. Software: Choice between the physical Node or a software-only license.
 
-1. **Gemini API Key**: For AI chatbot functionality
-2. **Google OAuth**: For Drive integration (configured in AuthContext)
+Customization: Choice of 5 colors (White, Transparent, Red, Pink, Blue) with real-time video previews.
 
-## Contributing 🤝
+Academic Calibration: AI grounding based on student level (School/College) and specific academic branches (Engineering, Medical, etc.).
 
-1. Focus on React Native Expo development
-2. Maintain dark theme consistency
-3. Test on both iOS and Android
-4. Follow TypeScript best practices
+3. Support & Partnerships (Contact.html)
 
----
+A tailored inquiry system for bulk orders, partnerships, and sponsorships.
 
-**Built for Winter Hackathon - TEAM_NAME** ❄️
+Integrated success modal UI for streamlined communication.
+
+🛠️ Tech Stack
+
+Front-end: HTML5, Tailwind CSS (Styling), Lucide Icons (Iconography).
+
+Interactions: Vanilla JavaScript (Video controls, Stepped configuration logic, Scroll animations).
+
+Design Language: Glassmorphism, Midnight Navy palette, Cyan accent gradients.
+
+Inspiration: "Academic Tech" – a blend of futuristic tech-vibes and student-focused empathy.
+
+👥 The Team
+
+Gayathri G — Chief Executive Officer
+
+Meloon Albert Pinto — Chief Technology Officer
+
+Prajwal Royston — Chief Marketing Officer
+
+Prapthi Shetty — Chief Financial Officer
+
+🛠️ Installation & Setup
+
+Clone the repository:
+
+git clone [https://github.com/your-username/capz-ai.git](https://github.com/your-username/capz-ai.git)
+
+
+Ensure your assets (videos and images) are in the root directory:
+
+Gemini_Generated_Image_pf91n7pf91n7pf91.jpg (Logo/Product Shot)
+
+Here_are_the_202601112216_y264q.mp4 (360 Render)
+
+white.mp4, transparent.mp4, etc. (Color Previews)
+
+Open index.html in any modern web browser.
+
+🛡️ Privacy & Security
+
+At Capz AI, privacy is our priority. Aura-Link uses local encryption for all audio data. Processing is grounded in official syllabus data via the "Master Node" sync, ensuring data is used only for your educational growth.
+
+Built with ❤️ by the Capz AI Team.
