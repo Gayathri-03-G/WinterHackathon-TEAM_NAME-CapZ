@@ -1,50 +1,116 @@
-# Welcome to your Expo app 👋
+# CapZ AI - Data Structures & Algorithms Learning App 📚
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A comprehensive React Native Expo app for learning Data Structures & Algorithms with AI-powered assistance.
 
-## Get started
+## Features ✨
 
-1. Install dependencies
+### 📱 **Multi-Tab Interface**
+- **Library**: Browse subjects and lectures
+- **Capture**: Voice recording and note-taking
+- **Profile**: User profile and settings
+- **Study**: Complete DSA learning system
 
-   ```bash
-   npm install
-   ```
+### 🎓 **Study System (Study Tab)**
+- **Library View**: Subject cards with progress tracking
+- **Session View**: 5 specialized tabs per lecture:
+  - 📝 **Notes**: Detailed lecture content
+  - 🤖 **ChatBot**: Gemini AI tutor (note-restricted answers)
+  - 📊 **Diagrams**: ASCII art data structure visualizations
+  - 🎵 **Audio**: Text-to-speech lecture playback with speed control
+  - 📅 **Schedule**: Study tasks and deadlines
+  - 📄 **PDF**: Embedded lecture materials
 
-2. Start the app
+### 🔐 **Authentication**
+- Google OAuth integration
+- Secure user sessions
 
-   ```bash
-   npx expo start
-   ```
+### 🎨 **UI/UX**
+- Dark theme optimized for mobile
+- Smooth navigation with Expo Router
+- Responsive design
 
-In the output, you'll find options to open the app in a
+## Setup Instructions 🚀
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. **Install Dependencies**
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. **Configure Gemini AI**
+1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Update `.env` file:
+```env
+EXPO_PUBLIC_GEMINI_API_KEY=your_actual_api_key_here
+```
 
-## Learn more
+### 3. **Start the App**
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 4. **Run on Device**
+- Scan QR code with Expo Go app
+- Or use Android/iOS simulators
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Project Structure 📁
 
-## Join the community
+```
+WinterHackathon-TEAM_NAME-CapZ/
+├── app/
+│   ├── (tabs)/
+│   │   ├── _layout.tsx      # Tab navigation
+│   │   ├── index.tsx        # SmartLibrary (Google Drive)
+│   │   ├── capture.tsx      # Voice capture
+│   │   ├── profile.tsx      # User profile
+│   │   └── library.tsx      # Study system
+│   └── _layout.tsx          # Root layout
+├── components/
+│   ├── Library.tsx          # Subject cards
+│   ├── Session.tsx          # Tab container
+│   ├── NotesTab.tsx         # Lecture notes
+│   ├── ChatBot.tsx          # AI assistant
+│   ├── DiagramsTab.tsx      # Data structures
+│   ├── AudioTab.tsx         # TTS player
+│   ├── ScheduleTab.tsx      # Study schedule
+│   └── PDFTab.tsx           # Lecture PDF
+├── data/
+│   ├── sessions.js          # Lecture data
+│   └── dsNotes.json         # DSA content
+├── context/
+│   └── AuthContext.tsx      # Authentication
+└── assets/
+    └── ds-lecture.html      # PDF content
+```
 
-Join our community of developers creating universal apps.
+## Key Technologies 🛠️
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **React Native** with Expo SDK
+- **Expo Router** for navigation
+- **Google Gemini AI** for chatbot
+- **Expo Speech** for text-to-speech
+- **React Native WebView** for PDF display
+- **Google OAuth** for authentication
+
+## Development Notes 📝
+
+- All components are TypeScript-ready
+- Dark theme with consistent styling
+- AI responses restricted to lecture notes only
+- Environment variables for secure API keys
+- Modular component architecture
+
+## API Keys Required 🔑
+
+1. **Gemini API Key**: For AI chatbot functionality
+2. **Google OAuth**: For Drive integration (configured in AuthContext)
+
+## Contributing 🤝
+
+1. Focus on React Native Expo development
+2. Maintain dark theme consistency
+3. Test on both iOS and Android
+4. Follow TypeScript best practices
+
+---
+
+**Built for Winter Hackathon - TEAM_NAME** ❄️

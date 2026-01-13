@@ -13,14 +13,18 @@ export default function LoginScreen() {
   const { setUser } = useAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId: 'YOUR_IOS_CLIENT_ID',
+    iosClientId: '208790099010-qksfpanfog3v3dksk0nbm0mbjdkf4cdn.apps.googleusercontent.com', // Same as Android for now
     androidClientId: '208790099010-qksfpanfog3v3dksk0nbm0mbjdkf4cdn.apps.googleusercontent.com',
     webClientId: '208790099010-52o46hlj77tfscp4q1dpofqj954n82am.apps.googleusercontent.com',
+    scopes: ['https://www.googleapis.com/auth/drive.readonly', 'profile', 'email'],
   });
 
   useEffect(() => {
     if (response?.type === 'success') {
       fetchUserInfo(response.authentication?.accessToken);
+    } else if (response?.type === 'error') {
+      console.error('OAuth Error:', response.error);
+      alert('Login failed. Please check your Google account settings.');
     }
   }, [response]);
 
@@ -29,11 +33,20 @@ export default function LoginScreen() {
       const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const userInfo = await res.json();
-      setUser(userInfo); 
+      setUser({
+        ...userInfo,
+        accessToken: token
+      });
       router.replace('/(tabs)');
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching user info:', error);
+      alert('Failed to get user information. Please try again.');
     }
   }
 
