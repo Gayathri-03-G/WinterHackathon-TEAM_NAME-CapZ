@@ -1,0 +1,8 @@
+{
+  "subject": "Data Structures & Algorithms",
+  "notes": {
+    "Binary Trees": "A binary tree is a tree data structure in which each node has at most two children, referred to as the left child and the right child. It is used to implement binary search trees and binary heaps. Binary trees are fundamental in computer science for representing hierarchical data.",
+    "Tree Traversals": "Tree traversal refers to the process of visiting each node in a tree data structure exactly once. Common traversal methods include inorder, preorder, and postorder traversals. Inorder traversal visits left subtree, root, right subtree; preorder visits root, left, right; postorder visits left, right, root. These are essential for operations like searching, insertion, and deletion in trees.",
+    "AVL Trees": "An AVL tree is a self-balancing binary search tree where the difference between heights of left and right subtrees cannot be more than one for all nodes. It automatically performs rotations to maintain balance after insertions and deletions, ensuring O(log n) time complexity for operations. AVL trees are named after their inventors Adelson-Velsky and Landis."
+  }
+}

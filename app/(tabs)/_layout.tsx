@@ -21,6 +21,8 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: ({color}) => <Ionicons name="person" size={24} color={color} /> }} />
+
+      <Tabs.Screen name="ds-notes" options={{ title: 'DS Notes', tabBarIcon: ({color}) => <Ionicons name="book" size={24} color={color} /> }} />
     </Tabs>
   );
 }
