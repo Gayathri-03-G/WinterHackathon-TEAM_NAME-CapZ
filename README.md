@@ -1,90 +1,68 @@
-Capz AI: Aura-Link 🧠✨
+<div align="center">
 
-Stop Taking Notes. Start Taking Insights.
+# 🧠 Capz AI | Aura-Link ✨
 
-Capz AI is an educational technology startup dedicated to removing the "interface" between students and learning. Our flagship product, the Aura-Link Node, is a screen-less wearable designed to help students stay 100% present in the classroom while an AI-powered "Second Brain" handles the heavy lifting of recording, transcribing, and visualizing complex concepts.
+**Stop Taking Notes. Start Taking Insights.** 🚀
 
-🚀 The Product: Aura-Link Node
+A screen-less wearable that captures every word, visualizes every concept, and syncs directly to your Google Workspace. Stay 100% present while your "Second Brain" handles the rest.
 
-The Aura-Link Node is a transparent, minimalist wearable that captures high-fidelity audio and uses Gemini 2.0 models to process lectures in real-time.
+[![Website Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
+[![Platform](https://img.shields.io/badge/Platform-Web-blue.svg)]()
 
-Key Innovations:
+</div>
 
-Voice-to-Diagram: Automatically converts verbal descriptions of processes into professional flowcharts and mind maps.
+## 🌟 About Aura-Link
 
-Google Workspace Native: Syncs directly to Google Docs, Drive, and Calendar—no new apps to learn.
+Capz AI was born out of a simple frustration: the harder we tried to take notes, the less we actually absorbed. We realized the interface was the problem. 
 
-AI Tutor: A context-aware assistant that knows exactly what was said in your specific lecture.
+Our mission is to create invisible technology. By removing the screen, we return your eyes to the professor and your mind to the material. 
 
-Screen-less Design: Promotes eye contact and engagement by removing the distraction of phones and laptops.
+### 🎯 The Philosophy
+**INVISIBLE TECH • PURE FOCUS**
 
-💻 The Platform
+---
 
-This repository contains the high-fidelity web platform for Capz AI, built with a "Cozy Dark" Academic Tech aesthetic.
+## 🚀 Why Aura-Link?
 
-1. Landing Page (index.html)
+*   **⏱️ The 30 vs 150 Gap Closed:** Professors speak at 150 words per minute; you write at 30. You are literally losing 80% of the value of every lecture. Aura-Link ensures you capture everything.
+*   **🚫 The Distraction Trap Avoided:** Phones are distracting. Apps are often banned. Aura-Link has no screen, meaning 100% eye contact with the material.
+*   **🧠 The Forgetting Curve Broken:** Without immediate structure, you’ll forget most of today's lesson by tomorrow. We build the structure for you in real-time.
 
-360° Product Visualization: Integrated 3D render video showing the transparent hardware.
+---
 
-Pain Point Analysis: Identifying the "30 vs 150 word gap" in traditional note-taking.
+## 🛠️ Technologies Used
 
-The Team: Introduction to the founders behind the mission.
+*   **HTML5** 🏗️ - Semantic structure emphasizing accessibility.
+*   **Tailwind CSS** 🎨 - Rapid, beautiful styling.
+*   **Vanilla JavaScript** ⚡ - Lightweight interactivity and seamless scroll animations.
+*   **Lucide Icons** 🖼️ - Crisp, modern iconography for a clean visual experience.
+*   **Plus Jakarta Sans** 🔤 - A premium typography choice for maximum readability.
 
-FAQ: Addressing privacy, legality, and technical concerns.
+---
 
-2. Product Configurator (Order.html)
+## 👥 The Minds Behind Capz AI
 
-Hardware vs. Software: Choice between the physical Node or a software-only license.
+Engineering a new era of cognitive assistance.
 
-Customization: Choice of 5 colors (White, Transparent, Red, Pink, Blue) with real-time video previews.
+*   👩‍💼 **Gayathri G** - *Team Lead*
+*   👨‍💻 **Meloon Albert Pinto** - *Hardware Design*
+*   👨‍💼 **Prajwal Royston** - *Software Architecture*
+*   👩‍💼 **Prapthi Shetty** - *Software Architecture*
 
-Academic Calibration: AI grounding based on student level (School/College) and specific academic branches (Engineering, Medical, etc.).
+---
 
-3. Support & Partnerships (Contact.html)
+## 🔐 FAQ & Privacy First
 
-A tailored inquiry system for bulk orders, partnerships, and sponsorships.
+**Is this legal to use in class?**
+Aura-Link is designed as an assistive tool. We recommend sharing your Aura-Link "Share Link" with professors to show them how it enhances your learning rather than just recording audio.
 
-Integrated success modal UI for streamlined communication.
+**How secure is my data?**
+Everything is processed with end-to-end encryption. Our "Privacy First" policy means audio is deleted immediately after transcription and diagramming, leaving only your structured insights behind.
 
-🛠️ Tech Stack
+---
 
-Front-end: HTML5, Tailwind CSS (Styling), Lucide Icons (Iconography).
+<div align="center">
 
-Interactions: Vanilla JavaScript (Video controls, Stepped configuration logic, Scroll animations).
+Powered by **Tattviq Labs** © 2024 Capz AI. All rights reserved. 🛡️
 
-Design Language: Glassmorphism, Midnight Navy palette, Cyan accent gradients.
-
-Inspiration: "Academic Tech" – a blend of futuristic tech-vibes and student-focused empathy.
-
-👥 The Team
-
-Gayathri G — Chief Executive Officer
-
-Meloon Albert Pinto — Chief Technology Officer
-
-Prajwal Royston — Chief Marketing Officer
-
-Prapthi Shetty — Chief Financial Officer
-
-🛠️ Installation & Setup
-
-Clone the repository:
-
-git clone [https://github.com/your-username/capz-ai.git](https://github.com/your-username/capz-ai.git)
-
-
-Ensure your assets (videos and images) are in the root directory:
-
-Gemini_Generated_Image_pf91n7pf91n7pf91.jpg (Logo/Product Shot)
-
-Here_are_the_202601112216_y264q.mp4 (360 Render)
-
-white.mp4, transparent.mp4, etc. (Color Previews)
-
-Open index.html in any modern web browser.
-
-🛡️ Privacy & Security
-
-At Capz AI, privacy is our priority. Aura-Link uses local encryption for all audio data. Processing is grounded in official syllabus data via the "Master Node" sync, ensuring data is used only for your educational growth.
-
-Built with ❤️ by the Capz AI Team.
+</div>
